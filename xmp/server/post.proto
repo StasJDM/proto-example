@@ -1,0 +1,15 @@
+syntax = "proto3";
+option go_package = "github.com/StasJDM/proto-example/pkg/server/post";
+
+package xmp.server.post;
+
+import "xmp/common/id.proto";
+
+service Post {
+  rpc Create(CreatePostRequest) returns (IdMessage) {}
+}
+
+message CreatePostRequest {
+  string title = 1;
+  string content = 2;
+}

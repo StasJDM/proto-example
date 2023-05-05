@@ -1,0 +1,16 @@
+syntax = "proto3";
+option go_package = "github.com/StasJDM/go-grpc-example/pkg/server/user";
+
+package xmp.server.user;
+
+import "xmp/common/id.proto";
+
+service User {
+  rpc Register(RegisterUserRequest) returns (IdMessage) {}
+}
+
+message RegisterUserRequest {
+  string email = 1;
+  string username = 2;
+  string password = 3;
+}

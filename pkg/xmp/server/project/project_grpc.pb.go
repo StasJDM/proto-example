@@ -8,7 +8,7 @@ package project
 
 import (
 	context "context"
-	id "github.com/StasJDM/proto-example/pkg/common/id"
+	common "github.com/StasJDM/proto-example/pkg/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -27,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProjectClient interface {
-	Create(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*id.IdMessage, error)
+	Create(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*common.IdMessage, error)
 }
 
 type projectClient struct {
@@ -38,8 +38,8 @@ func NewProjectClient(cc grpc.ClientConnInterface) ProjectClient {
 	return &projectClient{cc}
 }
 
-func (c *projectClient) Create(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*id.IdMessage, error) {
-	out := new(id.IdMessage)
+func (c *projectClient) Create(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*common.IdMessage, error) {
+	out := new(common.IdMessage)
 	err := c.cc.Invoke(ctx, Project_Create_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (c *projectClient) Create(ctx context.Context, in *CreateProjectRequest, op
 // All implementations must embed UnimplementedProjectServer
 // for forward compatibility
 type ProjectServer interface {
-	Create(context.Context, *CreateProjectRequest) (*id.IdMessage, error)
+	Create(context.Context, *CreateProjectRequest) (*common.IdMessage, error)
 	mustEmbedUnimplementedProjectServer()
 }
 
@@ -59,7 +59,7 @@ type ProjectServer interface {
 type UnimplementedProjectServer struct {
 }
 
-func (UnimplementedProjectServer) Create(context.Context, *CreateProjectRequest) (*id.IdMessage, error) {
+func (UnimplementedProjectServer) Create(context.Context, *CreateProjectRequest) (*common.IdMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedProjectServer) mustEmbedUnimplementedProjectServer() {}

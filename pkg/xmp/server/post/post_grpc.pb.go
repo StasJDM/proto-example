@@ -8,7 +8,7 @@ package post
 
 import (
 	context "context"
-	id "github.com/StasJDM/proto-example/pkg/common/id"
+	common "github.com/StasJDM/proto-example/pkg/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -27,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PostClient interface {
-	Create(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*id.IdMessage, error)
+	Create(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*common.IdMessage, error)
 }
 
 type postClient struct {
@@ -38,8 +38,8 @@ func NewPostClient(cc grpc.ClientConnInterface) PostClient {
 	return &postClient{cc}
 }
 
-func (c *postClient) Create(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*id.IdMessage, error) {
-	out := new(id.IdMessage)
+func (c *postClient) Create(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*common.IdMessage, error) {
+	out := new(common.IdMessage)
 	err := c.cc.Invoke(ctx, Post_Create_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (c *postClient) Create(ctx context.Context, in *CreatePostRequest, opts ...
 // All implementations must embed UnimplementedPostServer
 // for forward compatibility
 type PostServer interface {
-	Create(context.Context, *CreatePostRequest) (*id.IdMessage, error)
+	Create(context.Context, *CreatePostRequest) (*common.IdMessage, error)
 	mustEmbedUnimplementedPostServer()
 }
 
@@ -59,7 +59,7 @@ type PostServer interface {
 type UnimplementedPostServer struct {
 }
 
-func (UnimplementedPostServer) Create(context.Context, *CreatePostRequest) (*id.IdMessage, error) {
+func (UnimplementedPostServer) Create(context.Context, *CreatePostRequest) (*common.IdMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedPostServer) mustEmbedUnimplementedPostServer() {}

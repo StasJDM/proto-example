@@ -6,7 +6,7 @@ package xmp.server.user;
 import "xmp/common/id.proto";
 
 service User {
-  rpc Register(RegisterUserRequest) returns (IdMessage) {}
+  rpc Register(RegisterUserRequest) returns (common.IdMessage) {}
 }
 
 message RegisterUserRequest {

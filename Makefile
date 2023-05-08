@@ -1,7 +1,8 @@
 .SILENT:
 
 proto-gen:
-	mkdir -p pkg
+	rm -r pkg
+	mkdir pkg
 	for file in $$(git ls-files '*.proto'); do \
 		protoc \
 			--go_out=pkg/ \

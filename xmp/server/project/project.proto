@@ -6,7 +6,7 @@ package xmp.server.project;
 import "xmp/common/id.proto";
 
 service Project {
-  rpc Create(CreateProjectRequest) returns (IdMessage) {}
+  rpc Create(CreateProjectRequest) returns (common.IdMessage) {}
 }
 
 message CreateProjectRequest {

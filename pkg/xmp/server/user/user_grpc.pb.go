@@ -8,7 +8,7 @@ package user
 
 import (
 	context "context"
-	id "github.com/StasJDM/proto-example/pkg/common/id"
+	common "github.com/StasJDM/proto-example/pkg/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -27,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
-	Register(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*id.IdMessage, error)
+	Register(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*common.IdMessage, error)
 }
 
 type userClient struct {
@@ -38,8 +38,8 @@ func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 	return &userClient{cc}
 }
 
-func (c *userClient) Register(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*id.IdMessage, error) {
-	out := new(id.IdMessage)
+func (c *userClient) Register(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*common.IdMessage, error) {
+	out := new(common.IdMessage)
 	err := c.cc.Invoke(ctx, User_Register_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (c *userClient) Register(ctx context.Context, in *RegisterUserRequest, opts
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
-	Register(context.Context, *RegisterUserRequest) (*id.IdMessage, error)
+	Register(context.Context, *RegisterUserRequest) (*common.IdMessage, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -59,7 +59,7 @@ type UserServer interface {
 type UnimplementedUserServer struct {
 }
 
-func (UnimplementedUserServer) Register(context.Context, *RegisterUserRequest) (*id.IdMessage, error) {
+func (UnimplementedUserServer) Register(context.Context, *RegisterUserRequest) (*common.IdMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}

@@ -6,7 +6,7 @@ package xmp.server.post;
 import "xmp/common/id.proto";
 
 service Post {
-  rpc Create(CreatePostRequest) returns (IdMessage) {}
+  rpc Create(CreatePostRequest) returns (common.IdMessage) {}
 }
 
 message CreatePostRequest {

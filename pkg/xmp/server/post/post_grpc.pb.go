@@ -20,7 +20,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Post_Create_FullMethodName = "/xmp.server.post.Post/Create"
+	Post_Create_FullMethodName   = "/xmp.server.post.Post/Create"
+	Post_FindOne_FullMethodName  = "/xmp.server.post.Post/FindOne"
+	Post_FindMany_FullMethodName = "/xmp.server.post.Post/FindMany"
 )
 
 // PostClient is the client API for Post service.
@@ -28,6 +30,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PostClient interface {
 	Create(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*common.IdMessage, error)
+	FindOne(ctx context.Context, in *common.IdMessage, opts ...grpc.CallOption) (*FindOneResponse, error)
+	FindMany(ctx context.Context, in *common.PaginationMessage, opts ...grpc.CallOption) (*FindManyResponse, error)
 }
 
 type postClient struct {
@@ -47,11 +51,31 @@ func (c *postClient) Create(ctx context.Context, in *CreatePostRequest, opts ...
 	return out, nil
 }
 
+func (c *postClient) FindOne(ctx context.Context, in *common.IdMessage, opts ...grpc.CallOption) (*FindOneResponse, error) {
+	out := new(FindOneResponse)
+	err := c.cc.Invoke(ctx, Post_FindOne_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *postClient) FindMany(ctx context.Context, in *common.PaginationMessage, opts ...grpc.CallOption) (*FindManyResponse, error) {
+	out := new(FindManyResponse)
+	err := c.cc.Invoke(ctx, Post_FindMany_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PostServer is the server API for Post service.
 // All implementations must embed UnimplementedPostServer
 // for forward compatibility
 type PostServer interface {
 	Create(context.Context, *CreatePostRequest) (*common.IdMessage, error)
+	FindOne(context.Context, *common.IdMessage) (*FindOneResponse, error)
+	FindMany(context.Context, *common.PaginationMessage) (*FindManyResponse, error)
 	mustEmbedUnimplementedPostServer()
 }
 
@@ -61,6 +85,12 @@ type UnimplementedPostServer struct {
 
 func (UnimplementedPostServer) Create(context.Context, *CreatePostRequest) (*common.IdMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedPostServer) FindOne(context.Context, *common.IdMessage) (*FindOneResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindOne not implemented")
+}
+func (UnimplementedPostServer) FindMany(context.Context, *common.PaginationMessage) (*FindManyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindMany not implemented")
 }
 func (UnimplementedPostServer) mustEmbedUnimplementedPostServer() {}
 
@@ -93,6 +123,42 @@ func _Post_Create_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Post_FindOne_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.IdMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PostServer).FindOne(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Post_FindOne_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PostServer).FindOne(ctx, req.(*common.IdMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Post_FindMany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.PaginationMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PostServer).FindMany(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Post_FindMany_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PostServer).FindMany(ctx, req.(*common.PaginationMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Post_ServiceDesc is the grpc.ServiceDesc for Post service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -103,6 +169,14 @@ var Post_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _Post_Create_Handler,
+		},
+		{
+			MethodName: "FindOne",
+			Handler:    _Post_FindOne_Handler,
+		},
+		{
+			MethodName: "FindMany",
+			Handler:    _Post_FindMany_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

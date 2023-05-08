@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = "github.com/StasJDM/proto-example/pkg/xmp/common";
+
+package xmp.common;
+
+message PaginationMessage {
+    sint64 pageNumber = 1;
+    sint32 pageSize = 2;
+    sint64 total = 3;
+}

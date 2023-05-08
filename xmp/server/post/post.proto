@@ -4,12 +4,30 @@ option go_package = "github.com/StasJDM/proto-example/pkg/xmp/server/post";
 package xmp.server.post;
 
 import "xmp/common/id.proto";
+import "xmp/common/pagination.proto";
 
 service Post {
   rpc Create(CreatePostRequest) returns (common.IdMessage) {}
+  rpc FindOne(common.IdMessage) returns (FindOneResponse) {}
+  rpc FindMany(common.PaginationMessage) returns (FindManyResponse) {}
+}
+
+message PostMessage {
+  string id = 1;
+  string title = 2;
+  string content = 3;
 }
 
 message CreatePostRequest {
   string title = 1;
   string content = 2;
+}
+
+message FindOneResponse {
+  PostMessage post = 1;
+}
+
+message FindManyResponse {
+  repeated PostMessage posts = 1;
+  common.PaginationMessage pagination = 2;
 }

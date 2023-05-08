@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "github.com/StasJDM/proto-example/pkg/server/user";
+option go_package = "github.com/StasJDM/proto-example/pkg/xmp/server/user";
 
 package xmp.server.user;
 
